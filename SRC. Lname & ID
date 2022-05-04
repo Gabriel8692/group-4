@@ -1,0 +1,39 @@
+<?php
+$servername='localhost';
+$username="root";
+$password= "";
+
+try
+{
+    $con=new PDO("mysql:host=$servername;dbname=hr",$username,$password);
+    $con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    //echo 'connected';
+}
+catch(PDOException $e)
+{
+    echo '<br>'.$e->getMessage();
+}
+
+?>
+
+<?php
+include 'connect_hr_db.php';
+$searchErr= '';
+$employee_details='';
+if(isset($_POST['save']))
+{
+    if(!empty($_POST['search']))
+    {
+      $search=$_POST['search'];
+      $stmt = $con->prepare("select* from employee_info where department like '%$search%' or name like '%$search%'");
+      $stmt->execute();
+      $employee_details = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      
+     }
+     else
+     {
+        $searchErr = "Please enter the information";
+     }
+  }
+  
+  ?>
